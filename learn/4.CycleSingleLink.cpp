@@ -7,23 +7,23 @@ typedef int ElemType;
 typedef struct node{
     ElemType data;
     struct node* next;
-}SLinkNode;
+}CycleSingleLinkNode;
 
 /// @brief 初始化循环单向链表
 /// @param linkList 
-void InitList(SLinkNode** linkList){
-    *linkList = (SLinkNode*)malloc(sizeof(SLinkNode));
+void InitList(CycleSingleLinkNode** linkList){
+    *linkList = (CycleSingleLinkNode*)malloc(sizeof(CycleSingleLinkNode));
     (*linkList)->next = *linkList;
     printf("初始化链表成功\n");
 }
 
 /// @brief 销毁单向链表
 /// @param linkList 
-void DestroyList(SLinkNode** linkList){
+void DestroyList(CycleSingleLinkNode** linkList){
     //防止重复销毁：第一次销毁后已经把指针置空了
     if(linkList==NULL || *linkList==NULL)
         return;
-    SLinkNode* currentNode = (*linkList)->next;
+    CycleSingleLinkNode* currentNode = (*linkList)->next;
     while (currentNode!=*linkList){
         (*linkList)->next=currentNode->next;
         free(currentNode);
@@ -37,11 +37,11 @@ void DestroyList(SLinkNode** linkList){
 /// @brief 获取元素个数
 /// @param linkList 
 /// @return 
-int GetLength(SLinkNode* linkList){
+int GetLength(CycleSingleLinkNode* linkList){
     if(linkList==NULL)
         return 0;
     int count = 0;
-    SLinkNode* currentNode = linkList->next;
+    CycleSingleLinkNode* currentNode = linkList->next;
     while (currentNode!=linkList){
         count++;
         currentNode=currentNode->next;
@@ -54,12 +54,12 @@ int GetLength(SLinkNode* linkList){
 /// @param findIndex 
 /// @param value 
 /// @return 
-int GetElem(SLinkNode* linkList,int findIndex,ElemType *value){
+int GetElem(CycleSingleLinkNode* linkList,int findIndex,ElemType *value){
     if(linkList==NULL)
         return 0;
     if(findIndex<1)
         return 0;
-    SLinkNode* currentNode = linkList->next;
+    CycleSingleLinkNode* currentNode = linkList->next;
     for (int i = 1; i < findIndex; i++){
         //如果是最后一个节点，直接返回
         if(currentNode==linkList)
@@ -77,12 +77,12 @@ int GetElem(SLinkNode* linkList,int findIndex,ElemType *value){
 /// @param linkList 
 /// @param value 
 /// @return 
-int Locate(SLinkNode* linkList,ElemType value){
+int Locate(CycleSingleLinkNode* linkList,ElemType value){
     //链表不存在时按"找不到"处理，和函数本身的返回值约定保持一致
     if(linkList==NULL)
         return -1;
     int index = 0;
-    SLinkNode* tmpNode = linkList->next;
+    CycleSingleLinkNode* tmpNode = linkList->next;
     while(tmpNode!=linkList){
         if(tmpNode->data==value){
             return index+1;
@@ -98,13 +98,13 @@ int Locate(SLinkNode* linkList,ElemType value){
 /// @param insPos
 /// @param value 
 /// @return 
-int InsElem(SLinkNode** linkList,int insPos,ElemType value){
+int InsElem(CycleSingleLinkNode** linkList,int insPos,ElemType value){
     //linkList是被销毁过的指针时，*linkList为NULL，直接拒绝插入
     if(linkList==NULL || *linkList==NULL)
         return 0;
     if(insPos<1)
         return 0;
-    SLinkNode* currentNode=*linkList;
+    CycleSingleLinkNode* currentNode=*linkList;
     // 先走到插入位置的前一个元素
     for(int i = 0; i < insPos-1; i++){
         currentNode = currentNode->next;
@@ -112,7 +112,7 @@ int InsElem(SLinkNode** linkList,int insPos,ElemType value){
         if(currentNode==*linkList)
             return 0;
     }  
-    SLinkNode* insNode = (SLinkNode*)malloc(sizeof(SLinkNode));
+    CycleSingleLinkNode* insNode = (CycleSingleLinkNode*)malloc(sizeof(CycleSingleLinkNode));
     insNode->data = value;
     insNode->next = currentNode->next;
     currentNode->next = insNode;
@@ -123,14 +123,14 @@ int InsElem(SLinkNode** linkList,int insPos,ElemType value){
 /// @param linkList 
 /// @param delPos 
 /// @return 
-int DelElem(SLinkNode** linkList,int delPos){
+int DelElem(CycleSingleLinkNode** linkList,int delPos){
     //linkList是被销毁过的指针时，*linkList为NULL，直接拒绝删除
     if(linkList==NULL || *linkList==NULL)
         return 0;
     if(delPos<1)
         return 0;
-    SLinkNode* currentNode = *linkList;
-    SLinkNode* delNode;
+    CycleSingleLinkNode* currentNode = *linkList;
+    CycleSingleLinkNode* delNode;
     // 走到删除节点的前一个节点
     for (int i = 0; i < delPos-1; i++){
         currentNode=currentNode->next;
@@ -148,13 +148,13 @@ int DelElem(SLinkNode** linkList,int delPos){
 
 /// @brief 遍历输出元素
 /// @param linkList 
-void PrintList(SLinkNode* linkList){
+void PrintList(CycleSingleLinkNode* linkList){
     if(linkList==NULL){
         printf("链表已经销毁，不能遍历\n");
         return;
     }
     printf("链表元素: ");
-    SLinkNode* tmpNode = linkList->next;
+    CycleSingleLinkNode* tmpNode = linkList->next;
     while(tmpNode!=linkList){
         printf("%d ",tmpNode->data);
         tmpNode = tmpNode->next;
@@ -166,12 +166,12 @@ void PrintList(SLinkNode* linkList){
 /// @param linkList 
 /// @param data 
 /// @param len 
-void CreateListF(SLinkNode** linkList,ElemType data[],int len){
-    *linkList = (SLinkNode*)malloc(sizeof(SLinkNode));
+void CreateListF(CycleSingleLinkNode** linkList,ElemType data[],int len){
+    *linkList = (CycleSingleLinkNode*)malloc(sizeof(CycleSingleLinkNode));
     (*linkList)->next = *linkList;
-    SLinkNode* newNode;
+    CycleSingleLinkNode* newNode;
     for (int i = 0; i < len; i++){
-        newNode = (SLinkNode*)malloc(sizeof(SLinkNode));
+        newNode = (CycleSingleLinkNode*)malloc(sizeof(CycleSingleLinkNode));
         newNode->data = data[i];
         newNode->next = (*linkList)->next;
         (*linkList)->next = newNode;
@@ -182,17 +182,17 @@ void CreateListF(SLinkNode** linkList,ElemType data[],int len){
 /// @param linkList 
 /// @param data 
 /// @param len 
-void CreateListR(SLinkNode** linkList,ElemType data[],int len){
+void CreateListR(CycleSingleLinkNode** linkList,ElemType data[],int len){
     /*尾插法的预备动作是创建头节点，创建尾节点，
     把尾节点指向头节点，然后开始建表，创建新节点，
     然后尾节点后驱节点指向新节点，
     最后尾节点指向新节点*/
-    *linkList = (SLinkNode*)malloc(sizeof(SLinkNode));
+    *linkList = (CycleSingleLinkNode*)malloc(sizeof(CycleSingleLinkNode));
     (*linkList)->next = *linkList;
-    SLinkNode* newNode;
-    SLinkNode* currentNode=*linkList;
+    CycleSingleLinkNode* newNode;
+    CycleSingleLinkNode* currentNode=*linkList;
     for (int i = 0; i < len; i++){
-        newNode = (SLinkNode*)malloc(sizeof(SLinkNode));
+        newNode = (CycleSingleLinkNode*)malloc(sizeof(CycleSingleLinkNode));
         newNode->data = data[i];
         currentNode->next = newNode;
         currentNode = newNode;
@@ -203,7 +203,7 @@ void CreateListR(SLinkNode** linkList,ElemType data[],int len){
 
 int main()
 {
-    SLinkNode* list;
+    CycleSingleLinkNode* list;
     ElemType e;
     ElemType array[] = {1,2,3,4,5};
     InitList(&list);
