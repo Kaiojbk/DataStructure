@@ -1,0 +1,11 @@
+# 可执行程序
+*.exe
+*.out
+# 编译中间文件
+*.o
+*.obj
+# Windows系统文件
+Thumbs.db
+.DS_Store
+# 换行警告相关（可选）
+
